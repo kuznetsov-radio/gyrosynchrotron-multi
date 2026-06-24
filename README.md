@@ -1,2 +1,1 @@
-# gyrosynchrotron-multi
-Codes for computing the gyrosynchrotron emission from arbitrary charged particles
+Fast codes for computing the gyrosynchrotron emission from arbitrary charged particles (electrons, positrons, protons, etc.). See the files in the /doc folder for the theory behind and the calling conventions. See the files in the /examples folder for the calling examples.
