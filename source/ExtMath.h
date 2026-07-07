@@ -61,3 +61,4 @@ void trapzd2(Integrable2F *F, double a, double b, int N, double *I1, double *I2)
 void trapzdLog2(Integrable2F *F, double a, double b, int N, double *I1, double *I2);
 
 double Erf(double);
+double ExpBesselK(int, double);

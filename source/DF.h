@@ -1,5 +1,6 @@
 #pragma once
 
+#define THM 2  //relativistic thermal distribution
 #define PLW 3  //power-law distribution on energy
 #define DPL 4  //double power-law distribution on energy
 #define PLF 13 //power-law distribution of the electron flux on energy

@@ -26,6 +26,7 @@
 #define i_nb 2
 #define i_Eid 3
 #define i_Emin 4
+#define i_Tb 4
 #define i_Emax 5
 #define i_Ebreak 6
 #define i_delta1 7

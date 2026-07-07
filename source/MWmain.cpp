@@ -6,7 +6,6 @@
 #include "DF.h"
 #include "GS.h"
 #include "FF.h"
-#include "Messages.h"
 
 void ComputeMW(int *Lparms, double *Rparms, double *Sparms, double *Bparms, double *Flux)
 {
@@ -66,7 +65,7 @@ void ComputeMW(int *Lparms, double *Rparms, double *Sparms, double *Bparms, doub
    {
     double J=0, K=0;
 
-    for (int j=0; j<Ncomp; j++)
+    for (int j=0; j<Ncomp; j++) if (DF_arr[j]->valid)
     {
      double Jloc, Kloc;
      FindGSjk(f[i], B, st, ct, N, T, L, DF_arr[j], Nnodes, &Jloc, &Kloc);

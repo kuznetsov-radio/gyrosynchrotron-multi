@@ -5,12 +5,50 @@
 #include "Plasma.h"
 #include "IDLinterface.h"
 #include "ExtMath.h"
-#include "Messages.h"
 
 DF_energy :: ~DF_energy()
 {
  if (Ex) free(Ex);
  if (logScale) free(logScale);
+}
+
+//------------------------------------------------------------------
+
+class THMdf : public DF_energy // THM=2
+{
+ double A, theta, m;
+ public:
+ void FE(double E, double *F, double *dF_dE);
+ THMdf(double *Bparms);
+};
+
+void THMdf :: FE(double E, double *F, double *dF_dE)
+{
+ *F=A/(m*m*c*c*c*c)*(m*c*c+E)*sqrt(E*(2.0*m*c*c+E))*exp(-E/(m*c*c*theta));
+ *dF_dE=*F*(1.0/E+2.0/(m*c*c+E)+1.0/(2.0*m*c*c+E)-2.0/(m*c*c*theta))/2;
+}
+
+THMdf :: THMdf(double *Bparms)
+{
+ double T=Bparms[i_Tb];
+ double nb=Bparms[i_nb];
+
+ m=Bparms[i_m]*me;
+ theta=kB*T/(m*c*c);
+ A=nb/(2.0*M_PI*m*c*c*theta*ExpBesselK(2, 1.0/theta));
+
+ N_intervals=3;
+ Ex=(double*)malloc(sizeof(double)*(N_intervals+1));
+ Ex[0]=0.0;
+ Ex[1]=kB*T;
+ Ex[2]=kB*T*3;
+ Ex[3]=kB*T*710;
+ logScale=(int*)malloc(sizeof(int)*N_intervals);
+ logScale[0]=0;
+ logScale[1]=0;
+ logScale[2]=1;
+
+ valid=finite(A) && (A>0) && (T>0);
 }
 
 //------------------------------------------------------------------
@@ -357,6 +395,8 @@ DF :: DF(double *Bparms)
  int E_id=(int)Bparms[i_Eid];
  switch(E_id)
  {
+  case THM: F1=new THMdf(Bparms);
+	        break;
   case PLW: F1=new PLWdf(Bparms);
 	        break;
   case DPL: F1=new DPLdf(Bparms);
@@ -365,12 +405,15 @@ DF :: DF(double *Bparms)
 	        break;
   case DPF: F1=new DPFdf(Bparms);
 	        break;
-  default: F1=new PLWdf(Bparms);
+  default: F1=0;
  }
 
- N_intervals=F1->N_intervals;
- Ex=F1->Ex;
- logScale=F1->logScale;
+ if (F1)
+ {
+  N_intervals=F1->N_intervals;
+  Ex=F1->Ex;
+  logScale=F1->logScale;
+ }
 
  int mu_id=(int)Bparms[i_muid];
  switch(mu_id)
@@ -382,12 +425,13 @@ DF :: DF(double *Bparms)
 	        break;
   case GAB: F2=new GABdf(Bparms);
 	        break;
-  default: F2=new ISOdf();
+  default: F2=0;
  }
 
- acc_mu=F2->acc_mu;
+ if (F2) acc_mu=F2->acc_mu;
 
- valid=F1->valid && F2->valid;
+ if (F1 && F2) valid=F1->valid && F2->valid;
+ else valid=0;
 }
 
 DF :: ~DF()
