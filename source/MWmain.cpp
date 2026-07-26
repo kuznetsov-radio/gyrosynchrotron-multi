@@ -27,6 +27,8 @@ void ComputeMW(int *Lparms, double *Rparms, double *Sparms, double *Bparms, doub
  }
  else for (int i=0; i<Nf; i++) f[i]=Flux[D2(OutSize, 0, i)]*1e9;
 
+ double acc_mu_base=(Rparms[i_accMu]>0) ? Rparms[i_accMu] : acc_mu_default;
+
  double dz=Sparms[i_dz];
 
  double nth=Sparms[i_nth];
@@ -49,7 +51,7 @@ void ComputeMW(int *Lparms, double *Rparms, double *Sparms, double *Bparms, doub
 
  DF **DF_arr=(Ncomp>0) ? (DF**)malloc(sizeof(DF*)*Ncomp) : 0;
 
- for (int i=0; i<Ncomp; i++) DF_arr[i]=new DF(Bparms+BpSize*i);
+ for (int i=0; i<Ncomp; i++) DF_arr[i]=new DF(Bparms+BpSize*i, acc_mu_base);
 
  for (int i=0; i<Nf; i++) 
  {

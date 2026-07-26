@@ -261,7 +261,7 @@ class ISOdf : public DF_angle // ISO=0, ISO1=1
  public:
  void Fmu(double mu, double *F, double *dF_dmu, double *g1, double *g2);
  double g1(double mu);
- ISOdf();
+ ISOdf(double acc_mu_base);
 };
 
 void ISOdf :: Fmu(double mu, double *F, double *dF_dmu, double *g1, double *g2)
@@ -277,9 +277,9 @@ double ISOdf :: g1(double mu)
  return 0;
 }
 
-ISOdf :: ISOdf()
+ISOdf :: ISOdf(double acc_mu_base)
 {
- acc_mu=1e-3;
+ acc_mu=acc_mu_base;
  valid=1;
 }
 
@@ -291,7 +291,7 @@ class GAUdf : public DF_angle // GAU=3
  public:
  void Fmu(double mu, double *F, double *dF_dmu, double *g1, double *g2);
  double g1(double mu);
- GAUdf(double *Bparms);
+ GAUdf(double *Bparms, double acc_mu_base);
 };
 
 void GAUdf :: Fmu(double mu, double *F, double *dF_dmu, double *g1, double *g2)
@@ -320,14 +320,14 @@ double GAUdf :: g1(double mu)
  return (amu<mu_c) ? 0.0 : -2.0*(amu-mu_c)/sqr(dmu)*sign(mu);
 }
 
-GAUdf :: GAUdf(double *Bparms)
+GAUdf :: GAUdf(double *Bparms, double acc_mu_base)
 {
  mu_c=cos(Bparms[i_alpha0]*M_PI/180);
  dmu=Bparms[i_dmu];
 
  A=0.5/(mu_c+dmu*sqrt(M_PI)/2*Erf((1.0-mu_c)/dmu));
 
- acc_mu=min(dmu*dmu/30, 1e-3);
+ acc_mu=min(dmu*dmu/30, acc_mu_base);
  valid=finite(A) && (A>0.0);
 }
 
@@ -339,7 +339,7 @@ class GABdf : public DF_angle // GAB=4
  public:
  void Fmu(double mu, double *F, double *dF_dmu, double *g1, double *g2);
  double g1(double mu);
- GABdf(double *Bparms);
+ GABdf(double *Bparms, double acc_mu_base);
 };
 
 void GABdf :: Fmu(double mu, double *F, double *dF_dmu, double *g1, double *g2)
@@ -355,14 +355,14 @@ double GABdf :: g1(double mu)
  return -2.0*(mu-mu0)/sqr(dmu);
 }
 
-GABdf :: GABdf(double *Bparms)
+GABdf :: GABdf(double *Bparms, double acc_mu_base)
 {
  mu0=cos(Bparms[i_alpha0]*M_PI/180);
  dmu=Bparms[i_dmu];
 
  A=2.0/(sqrt(M_PI)*dmu)/(Erf((1.0-mu0)/dmu)+Erf((1.0+mu0)/dmu));
 
- acc_mu=min(dmu*dmu/30, 1e-3);
+ acc_mu=min(dmu*dmu/30, acc_mu_base);
  valid=finite(A) && (A>0.0);
 }
 
@@ -386,7 +386,7 @@ double DF :: g1(double mu)
  return F2->g1(mu);
 }
 
-DF :: DF(double *Bparms)
+DF :: DF(double *Bparms, double acc_mu_base)
 {
  q=fabs(Bparms[i_q]*qe);
  m=Bparms[i_m]*me;
@@ -419,11 +419,11 @@ DF :: DF(double *Bparms)
  switch(mu_id)
  {
   case ISO:
-  case ISO1: F2=new ISOdf();
+  case ISO1: F2=new ISOdf(acc_mu_base);
 	         break;
-  case GAU: F2=new GAUdf(Bparms);
+  case GAU: F2=new GAUdf(Bparms, acc_mu_base);
 	        break;
-  case GAB: F2=new GABdf(Bparms);
+  case GAB: F2=new GABdf(Bparms, acc_mu_base);
 	        break;
   default: F2=0;
  }

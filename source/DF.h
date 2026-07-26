@@ -50,6 +50,6 @@ class DF
 
  void F(double E, double mu, double *F, double *dF_dE, double *dF_dmu, double *g1, double *g2);
  double g1(double mu);
- DF(double *Bparms);
+ DF(double *Bparms, double acc_mu_base);
  ~DF();
 };

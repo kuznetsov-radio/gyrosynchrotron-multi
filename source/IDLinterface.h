@@ -12,7 +12,8 @@
 #define i_S 0
 #define i_f0 1
 #define i_df 2
-#define RpSize 3
+#define i_accMu 3
+#define RpSize 4
 
 #define i_dz 0
 #define i_nth 1
