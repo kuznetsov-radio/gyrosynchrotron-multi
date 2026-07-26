@@ -14,7 +14,7 @@ pro Example_ep
  Lparms[1]=2 ;number of components
  Lparms[3]=1 ;FF is off
  
- Rparms=dblarr(3)
+ Rparms=dblarr(4)
  Rparms[0]=S    ;area, cm^2
  Rparms[1]=1d9  ;starting frequency to calculate spectrum, Hz
  Rparms[2]=0.02 ;logarithmic step in frequency

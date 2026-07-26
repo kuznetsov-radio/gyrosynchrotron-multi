@@ -11,7 +11,7 @@ pro gsAntiProtons
  Lparms[2]=32 ;N_nodes
  Lparms[3]=1 ;FF off
  
- Rparms=dblarr(3)
+ Rparms=dblarr(4)
  Rparms[0]=S ;area, cm^2
  Rparms[1]=3d8  ;starting frequency to calculate spectrum, Hz
  Rparms[2]=0.02 ;logarithmic step in frequency
