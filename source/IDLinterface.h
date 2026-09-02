@@ -39,3 +39,9 @@
 #define BpSize 14
 
 #define OutSize 3
+
+#ifndef LINUX
+extern "C" __declspec(dllexport) int GET_MW(int argc, void **argv);
+#else
+extern "C" double GET_MW(int argc, void **argv);
+#endif

@@ -157,6 +157,7 @@
     <ClCompile Include="Messages.cpp" />
     <ClCompile Include="MWmain.cpp" />
     <ClCompile Include="Plasma.cpp" />
+    <ClCompile Include="PythonInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DF.h" />
